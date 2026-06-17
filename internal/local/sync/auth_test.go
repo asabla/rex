@@ -15,7 +15,7 @@ import (
 
 	"github.com/asabla/rex/internal/core/identity"
 	"github.com/asabla/rex/internal/core/storage/eventlog"
-	"github.com/asabla/rex/rex-centralized/central/server"
+	"github.com/asabla/rex/internal/testcentral"
 )
 
 // startServerWithSigner mirrors the in-process central but with the

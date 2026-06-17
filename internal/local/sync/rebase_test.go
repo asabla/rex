@@ -11,7 +11,7 @@ import (
 
 	"github.com/asabla/rex/internal/core/sync/conflict"
 	"github.com/asabla/rex/internal/core/sync/proto"
-	"github.com/asabla/rex/rex-centralized/central/server"
+	"github.com/asabla/rex/internal/testcentral"
 )
 
 // rebaseTestWorkspaceID is the canonical workspace id every

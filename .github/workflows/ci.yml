@@ -17,24 +17,6 @@ jobs:
   test:
     name: build & test
     runs-on: ubuntu-latest
-    services:
-      # Postgres for the central-node store tests. Tests skip
-      # when REX_PG_TEST_DSN is unset (developer laptops without
-      # Docker), so this services: block is what makes them
-      # actually run in CI.
-      postgres:
-        image: postgres:17-alpine
-        env:
-          POSTGRES_PASSWORD: ci
-          POSTGRES_DB: rex_test
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 5s
-          --health-timeout 3s
-          --health-retries 5
-    env:
-      REX_PG_TEST_DSN: postgres://postgres:ci@127.0.0.1:5432/rex_test?sslmode=disable
     steps:
       - uses: actions/checkout@v6
         with:
@@ -52,32 +34,10 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      # The Postgres service runs 17, but ubuntu-latest ships pg_dump 16,
-      # which refuses to dump from a newer server. Install the matching
-      # client tools from the official PGDG repo and put them ahead of
-      # the system pg_dump on PATH.
-      - name: Install PostgreSQL 17 client
-        run: |
-          sudo install -d /usr/share/postgresql-common/pgdg
-          sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-            -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
-          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
-            | sudo tee /etc/apt/sources.list.d/pgdg.list
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client-17
-          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
-
       - name: Verify modules
         run: |
-          # The central node is parked under rex-centralized/ (git-ignored)
-          # while it is being broken out into its own service. Strict
-          # `go mod tidy` cannot run against this partial checkout: the
-          # build-tagged sync/cli e2e tests import the absent central tree,
-          # and pgx is a central-only dependency that would be pruned here
-          # but is required by the full module locally. Verify module
-          # integrity instead; strict tidy returns when central becomes its
-          # own module.
-          go mod verify
+          go mod tidy
+          git diff --exit-code go.mod go.sum
 
       - name: Build
         run: go build ./...

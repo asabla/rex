@@ -102,7 +102,7 @@ func TestVerifyCodePathMissingLenientWarning(t *testing.T) {
 func TestVerifyCodePathMissingButIgnoredIsWarning(t *testing.T) {
 	t.Parallel()
 	ws, root := makeWorkspaceWithSpec(t, "done", []specfmt.ProofEntry{
-		{Kind: specfmt.ProofKindCode, Path: "rex-centralized/central/server/server.go"},
+		{Kind: specfmt.ProofKindCode, Path: "external/central/server/server.go"},
 	})
 	res := Verify(ws, Options{
 		WorkspaceRoot: root,

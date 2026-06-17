@@ -1,0 +1,27 @@
+# PROPOSED AMENDMENT — awaiting human signoff. Do not fold into specs/sync.yaml until approved.
+# Spec: sync
+# Date: 2026-06-17
+# Status: proposed
+
+metadata:
+  target_spec: sync
+  motivation: |
+    `sync.yaml`'s `sync-api-server` task still proves the central sync API via
+    `rex-centralized/central/server/...` paths inside the parent repo. The
+    authoritative implementation now lives in the standalone `rex-lab` repo.
+
+changes:
+  - task: sync-api-server
+    current: |
+      Central proof paths are workspace-relative `rex-centralized/...` entries.
+    proposed: |
+      Replace those proof entries with the canonical `rex-lab` paths for
+      `central/server/git_store.go`, `central/server/git_handler.go`, and
+      `central/server/git_test.go`, or move the server-side proof for this task
+      into the central repo's spec book.
+    rationale: |
+      The server implementation no longer lives in the parent workspace.
+
+open_questions: |
+  If cross-repo proof entries are adopted, this spec likely needs the same proof
+  mechanism as the broader central-node/web-ui/identity specs.

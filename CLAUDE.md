@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository state
 
-The Go module `github.com/asabla/rex` is built out to a v1 daily-driveable shape. All six build-order steps below have shipped; the local node is usable end-to-end (workspace bootstrap → spec author/validate → run with shell + spec_validate + harness primitives → audit log → sync push/pull against a central node → snapshots). Two binaries: `cmd/rex` (local CLI + embedded web UI via `rex serve`) and `cmd/rex-central` (in-process central node).
+The Go module `github.com/asabla/rex` is built out to a v1 daily-driveable shape for the local node. The local node is usable end-to-end (workspace bootstrap → spec author/validate → run with shell + spec_validate + harness primitives → audit log → sync push/pull against a central node → snapshots). The standalone central server now lives in the separate `rex-lab` repository.
 
 Major shipped post-trunk pieces beyond the build order: hooks dispatcher, log tail, spec template scaffolding, FTS5 search across events + specs, embedded web UI (`/`, `/specs`, `/specs/<id>`, `/runs`, `/runs/<id>` with SSE live tail, `/audit`, `/remotes`).
 
 ### Common commands
 
-- Build both binaries: `make build` (outputs to `bin/`)
+- Build the local binary: `make build` (outputs to `bin/`)
 - Run all tests: `make test` (or `make test-race`)
 - Vet: `make vet`
 - Format: `make fmt`
@@ -20,9 +20,7 @@ Major shipped post-trunk pieces beyond the build order: hooks dispatcher, log ta
 - Run a single binary directly: `go run ./cmd/rex --version`
 - Validate every spec strictly: `go run ./cmd/rex spec validate specs/*.yaml` (zero errors, zero warnings is the bar)
 - Start the local web UI: `go run ./cmd/rex serve` (binds 127.0.0.1:7474 by default; loopback-only)
-- Run with the Postgres-backed central tests: `make pg-up && make test-pg` (starts a local Postgres container, runs the full suite with `REX_PG_TEST_DSN` set so the central `PostgresStore` tests don't skip; `make pg-down` cleans up)
-- Run rex-central with persistence: `rex-central serve --db 'postgres://...'` — without `--db` events go to an in-memory store and are lost on restart
-- One-shot central web UI for verification: `make web-dev` brings up a dedicated `rex-pg-dev` Postgres container on port 55433 and runs `rex-central serve --dev` (registers the local default identity at `~/.config/rex/identity/` as an authorized key, promotes it to admin of the default org, auto-enables `--web`). From another terminal: `bin/rex remote login dev http://127.0.0.1:8080` (two-arg form: skips the registry, opens the browser at the redeem URL which lands a session cookie). Then click around starting at http://127.0.0.1:8080/orgs/default/members. `make web-dev-down` tears down the pg container. NEVER pass `--dev` in production.
+- The standalone central server now lives in the separate `rex-lab` repository. This repo's default build/test surface is the local `rex` binary plus shared core.
 
 CI lives in `.github/workflows/ci.yml` and runs build, vet, race tests, `go mod tidy` drift check, and golangci-lint on every push and PR.
 
@@ -117,7 +115,7 @@ Captured in `readme.md` and `overview.SCOPE.*` — do not implement:
 ## Project conventions
 
 - **Go module path:** `github.com/asabla/rex`.
-- **Go version:** pinned via `go.mod` (currently 1.25.0); CI uses `go-version-file: go.mod`. Bump in `go.mod` and CI follows. The `deploy/Dockerfile` and `deploy/docker-compose.dev.yml` use `golang:1.25-alpine` to match — bump together when raising `go.mod`.
+- **Go version:** pinned via `go.mod` (currently 1.25.0); CI uses `go-version-file: go.mod`. Bump in `go.mod` and CI follows. The standalone central repo (`rex-lab`) carries its own matching deploy/build assets.
 - **No-cgo guarantee:** `overview.ENG.2` forbids cgo in the local binary. SQLite goes through `modernc.org/sqlite` (pure Go). Do not add cgo deps.
 - **Linter:** `golangci-lint` with config at `.golangci.yml`.
 - **Tests:** stdlib `testing`. Determinism is required for sync, executor, and audit-log tests — inject time and randomness, never read the environment in test bodies (`overview.ENG.4`).

@@ -12,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/asabla/rex/internal/core/storage/eventlog"
-	"github.com/asabla/rex/rex-centralized/central/server"
+	"github.com/asabla/rex/internal/testcentral"
 )
 
 func startCentral(t *testing.T) (*server.Server, *httptest.Server) {

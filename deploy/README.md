@@ -1,5 +1,8 @@
 # Deploying rex-central
 
+This copy is kept in `rex` temporarily for spec-proof/history bookkeeping.
+The canonical deploy assets now live in the standalone `rex-lab` repository.
+
 This directory holds the bundled v1 deployment recipe for
 `rex-central`, satisfying the `docker-compose-base` task in
 `specs/central-node.yaml`.

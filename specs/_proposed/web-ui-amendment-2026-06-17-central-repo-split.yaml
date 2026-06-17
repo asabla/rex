@@ -1,0 +1,37 @@
+# PROPOSED AMENDMENT — awaiting human signoff. Do not fold into specs/web-ui.yaml until approved.
+# Spec: web-ui
+# Date: 2026-06-17
+# Status: proposed
+
+metadata:
+  target_spec: web-ui
+  motivation: |
+    The central-web tasks in `web-ui.yaml` still cite `rex-centralized/...`
+    proof paths in the parent repo. The central web shell and its adapters now
+    live in the standalone `rex-lab` repository.
+
+changes:
+  - tasks:
+      - central-web-shell
+      - central-browser-auth
+      - central-resolver-bootstrap
+      - central-read-side-runs-audit
+      - central-read-side-search-amendments
+      - central-read-side-remotes-settings
+      - central-workspaces-index
+      - central-org-admin-pages
+      - central-placeholder-surfaces
+    current: |
+      Central proof entries cite `rex-centralized/central/...` and
+      `rex-centralized/cmd/rex-central/...` paths.
+    proposed: |
+      Repoint those proofs at the canonical `rex-lab` locations, or move the
+      central-web task proofs into the central repo's spec set if the spec book
+      is split by repository ownership.
+    rationale: |
+      The parked in-repo subtree is no longer the authoritative implementation.
+
+open_questions: |
+  The current proof model is workspace-relative. If the spec book stays in the
+  parent repo, a follow-up spec-format amendment may be needed to express
+  cross-repo proofs directly instead of relying on an ignored parked path.

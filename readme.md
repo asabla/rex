@@ -38,17 +38,18 @@ Full list in [`overview.SCOPE.*`](specs/overview.yaml).
 
 ## Install
 
-Two binaries: `rex` (the local CLI + embedded web UI) and `rex-central` (the in-process central node, optional).
+This repository builds the local `rex` CLI + embedded web UI.
+The central server now lives in the separate `rex-lab` repository.
 
 ```sh
 # From source — pure Go, no cgo, builds offline
 git clone https://github.com/asabla/rex.git && cd rex
-make install           # → $GOBIN/rex, $GOBIN/rex-central
+make install           # → $GOBIN/rex
 ```
 
-Or grab `make build` to drop binaries into `./bin/` without polluting your `GOBIN`.
+Or run `make build` to drop the binary into `./bin/` without polluting your `GOBIN`.
 
-Requires Go 1.25+. Local persistence is SQLite via `modernc.org/sqlite` (no system libs). Central persistence is Postgres 17 (recommended; 16 works) or in-memory for ephemeral demos.
+Requires Go 1.25+. Local persistence is SQLite via `modernc.org/sqlite` (no system libs).
 
 ## 60-second quickstart
 
@@ -179,14 +180,12 @@ For the long form, read [`specs/overview.yaml`](specs/overview.yaml) first, then
 ```
 cmd/                          # main packages
   rex/                        # local CLI + embedded web UI
-  rex-central/                # central node (HTTP server + Postgres)
 internal/
   core/                       # shared core (event log, executor, ACP, MCP, search, sync, audit, identity)
   local/                      # local-only: CLI commands, web UI, sync client, remotes registry
-  central/                    # central-only: HTTP server, Postgres store, RLS, backup
 specs/                        # 14 v1 specs (the contract)
   _proposed/                  # spec amendments awaiting human signoff
-deploy/                       # Dockerfile, docker-compose for the central node
+deploy/                       # historical central deployment assets pending spec-bookkeeping cleanup
 ```
 
 ---
@@ -199,7 +198,7 @@ deploy/                       # Dockerfile, docker-compose for the central node
 | Author or amend a spec | [`specs/spec-format.yaml`](specs/spec-format.yaml) (the format describes itself) |
 | Know what syncs and how | [`specs/sync.yaml`](specs/sync.yaml) |
 | Run a harness via ACP | [`specs/execution.yaml`](specs/execution.yaml) |
-| Stand up a central node | [`specs/central-node.yaml`](specs/central-node.yaml) + [`deploy/`](deploy/) |
+| Stand up a central node | [`specs/central-node.yaml`](specs/central-node.yaml) plus the standalone `rex-lab` repo |
 | Add a hook | [`specs/hooks.yaml`](specs/hooks.yaml) |
 | Find your way around the CLI | `rex help` and `rex <noun> --help`, plus [`specs/cli.yaml`](specs/cli.yaml) |
 | Contribute | [`CLAUDE.md`](CLAUDE.md) — read order, rules of engagement, commit format |

@@ -1,0 +1,50 @@
+# PROPOSED AMENDMENT — awaiting human signoff. Do not fold into specs/central-node.yaml until approved.
+# Spec: central-node
+# Date: 2026-06-17
+# Status: proposed
+
+metadata:
+  target_spec: central-node
+  motivation: |
+    `central-node.yaml` still assumes the central implementation and its deploy
+    assets live inside the parent `rex` repository. After the split, the
+    authoritative implementation and deploy assets live in `rex-lab`.
+
+changes:
+  - section: description
+    current: |
+      A central node is the same Go binary as the local node, plus a Postgres
+      adapter and a multi-tenant routing layer.
+    proposed: |
+      A central node is the standalone `rex-central` Go binary, implemented in
+      the `rex-lab` repository, plus a Postgres adapter and a multi-tenant
+      routing layer.
+    rationale: |
+      The binary and deploy surface are no longer shipped from this repository.
+
+  - task: docker-compose-base
+    current: |
+      Proof cites `deploy/docker-compose.yml`, `deploy/docker-compose.dev.yml`,
+      and `deploy/Dockerfile` in the parent repo.
+    proposed: |
+      Point the deployment proof at the canonical deploy assets in `rex-lab`, or
+      move the task itself into the central repo's spec book.
+    rationale: |
+      The parent repo's deploy copy is now transitional/bookkeeping-only.
+
+  - tasks:
+      - postgres-schema
+      - tenant-routing
+      - tenant-rls
+      - admin-bootstrap
+      - backups-and-restore
+      - health-endpoints
+      - structured-logging
+    current: |
+      Proof entries cite `rex-centralized/...` workspace-relative paths.
+    proposed: |
+      Replace those proof paths with the canonical `rex-lab` locations (`central/...`,
+      `cmd/rex-central/...`, `deploy/...`) once the chosen cross-repo-proof approach
+      is approved.
+    rationale: |
+      The parked subtree is no longer authoritative.

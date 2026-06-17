@@ -1,0 +1,29 @@
+# PROPOSED AMENDMENT — awaiting human signoff. Do not fold into specs/identity-and-trust.yaml until approved.
+# Spec: identity-and-trust
+# Date: 2026-06-17
+# Status: proposed
+
+metadata:
+  target_spec: identity-and-trust
+  motivation: |
+    Several completed tasks in `identity-and-trust.yaml` prove central-server
+    behavior through `rex-centralized/...` paths in the parent repo. Those
+    implementations now live in the standalone `rex-lab` repository.
+
+changes:
+  - tasks:
+      - handshake-protocol
+      - token-lifecycle
+      - rbac-engine
+      - org-model-central
+      - invite-redeem-flow
+    current: |
+      Central proof entries cite `rex-centralized/central/...` and
+      `rex-centralized/cmd/rex-central/...` paths.
+    proposed: |
+      Repoint those proofs at the canonical `rex-lab` locations, or move the
+      central-owned proof portions of these tasks into the central repo's spec
+      set if that becomes the chosen split model.
+    rationale: |
+      The proof paths are now implementation-history, not the active source of
+      truth.

@@ -41,7 +41,7 @@ type RedeemOutcome struct {
 
 // InviteRedeemer is the surface the central web shell calls
 // to drive the redeem flow (identity-and-trust.AUTH.2.1 + ORG.5).
-// cmd/rex-central satisfies it by wrapping
+// The standalone central server satisfies it by wrapping
 // PostgresStore.{PeekInvite, RedeemInvite}, plus an audit
 // emission + in-memory Keystore overlay on the redeem-side so
 // the new key works immediately without a central restart.

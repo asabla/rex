@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/asabla/rex/internal/core/storage/eventlog"
-	"github.com/asabla/rex/rex-centralized/central/server"
+	"github.com/asabla/rex/internal/testcentral"
 )
 
 // TestTwoLocalsViaCentralRoundTrip wires up one in-process central

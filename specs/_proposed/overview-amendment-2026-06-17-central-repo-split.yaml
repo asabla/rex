@@ -1,0 +1,47 @@
+# PROPOSED AMENDMENT — awaiting human signoff. Do not fold into specs/overview.yaml until approved.
+# Spec: overview
+# Date: 2026-06-17
+# Status: proposed
+
+metadata:
+  target_spec: overview
+  motivation: |
+    The central server has now been split into the standalone `rex-lab`
+    repository. `overview.yaml` still describes local and central as one Go
+    module in one repository, and its bootstrap proof still cites the parked
+    `rex-centralized/` tree inside this repo.
+
+    That wording matched the transitional state but no longer matches the
+    current repository boundary.
+
+changes:
+  - requirement: SYS.1
+    current: |
+      Local and central are built from one Go module; differences live behind
+      build tags or a thin shell, never in core logic.
+    proposed: |
+      Local and central are both implemented in Go and keep their shared logic
+      aligned through mirrored/shared packages, but the local node and the
+      central server may live in separate repositories. Per-flavor differences
+      still belong in thin shells or boundary packages, never in the shared core
+      semantics.
+    rationale: |
+      The implementation is no longer one module in one repo. The architectural
+      intent that the shared logic stay aligned still stands, but the repository
+      boundary changed.
+
+  - task: bootstrap-repo
+    current: |
+      Proof cites `rex-centralized/cmd/rex-central/` inside this repo.
+    proposed: |
+      Replace the local parked-tree proof with a citation to the standalone
+      `rex-lab` repository's `cmd/rex-central/` tree, or move the central-server
+      bootstrap proof out of the parent repo's spec book entirely if central-only
+      tasks migrate with the split.
+    rationale: |
+      The parked tree is no longer the authoritative implementation location.
+
+open_questions: |
+  Human decision needed: should the central-facing tasks/specs stay in the
+  parent spec book with explicit cross-repo proof support, or should the
+  central-owned portions move into the rex-lab spec set?
