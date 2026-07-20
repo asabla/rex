@@ -49,7 +49,7 @@ make install           # → $GOBIN/rex
 
 Or run `make build` to drop the binary into `./bin/` without polluting your `GOBIN`.
 
-Requires Go 1.25+. Local persistence is SQLite via `modernc.org/sqlite` (no system libs).
+Requires Go 1.26+. Local persistence is SQLite via `modernc.org/sqlite` (no system libs).
 
 ## 60-second quickstart
 
@@ -164,7 +164,7 @@ For the long form, read [`specs/overview.yaml`](specs/overview.yaml) first, then
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| Language | Go 1.25, one module, shared core | Differences live behind build tags or a thin shell, never in core (`overview.SYS.1`) |
+| Language | Go 1.26, one module, shared core | Differences live behind build tags or a thin shell, never in core (`overview.SYS.1`) |
 | Local persistence | SQLite + FTS5 (pure-Go, no cgo — `overview.ENG.2`) | Single-file, durable, no daemon |
 | Central persistence | Postgres 17 + Postgres FTS | RLS for multi-tenant isolation, `pg_dump` for backups |
 | Transport | HTTPS + Server-Sent Events | No plaintext fallback (`overview.SEC.3`) |

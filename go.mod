@@ -1,23 +1,23 @@
 module github.com/asabla/rex
 
-// macOS 15+/26 require Mach-O binaries to carry LC_UUID; Go toolchains
-// older than 1.23 produce test binaries that the loader rejects.
-// `go 1.23.0` plus GOTOOLCHAIN=auto (Go's default) makes older local
-// toolchains transparently fetch a 1.23.x release that links cleanly.
-go 1.25.0
+// Keep the language minimum separate from the patched toolchain used for
+// development and CI. GOTOOLCHAIN=auto lets older installs fetch it.
+go 1.26.0
+
+toolchain go1.26.5
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/alecthomas/chroma/v2 v2.24.1
+	github.com/alecthomas/chroma/v2 v2.27.0
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1
-	modernc.org/sqlite v1.50.0
+	modernc.org/sqlite v1.54.0
 )
 
 require (
-	github.com/dlclark/regexp2 v1.12.0 // indirect
+	github.com/dlclark/regexp2/v2 v2.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -27,9 +27,9 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
-	golang.org/x/sys v0.42.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	modernc.org/libc v1.72.0 // indirect
+	modernc.org/libc v1.74.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 )
